@@ -45,7 +45,7 @@ class Button:
         screen.blit(self.image, self.rect)
 
     def is_clicked(self, mouse_pos):
-        #check if left mouse button is clicked on buttons
+        #check if left mouse button is clicked on button
         return self.rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0] == 1
 
 class Game:
