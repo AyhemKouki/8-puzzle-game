@@ -18,7 +18,7 @@ Use the A* Search button to solve the puzzle using A* Search algorithm.
 Click on a tile adjacent to the empty space to move it.
 Click on the buttons to perform specific actions.
 # Features
-Random Shuffling: The tiles are shuffled randomly at the beginning of the game.
-Reset Option: Players can reset the game to its initial state.
-BFS Solver: Solve the puzzle using Breadth-First Search algorithm.
-A* Search Solver: Solve the puzzle using A* Search algorithm
+"Random Shuffling": The tiles are shuffled randomly at the beginning of the game.\n
+"Reset Option": Players can reset the game to its initial state.
+"BFS Solver": Solve the puzzle using Best-First Search algorithm.
+"A* Search Solver": Solve the puzzle using A* Search algorithm
