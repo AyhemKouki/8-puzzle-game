@@ -3,8 +3,7 @@ import pygame , random , sys , heapq
 #COULEURS
 WHITE = (255,255,255)
 BLACK = (0,0,0)
-LIGHTGREY = (26, 192, 207)
-GREEN = (0, 255, 0)
+NEON = (26, 192, 207)
 #CONTANTES
 WIDTH , HEIGHT = 1000 , 600
 FPS = 60
@@ -24,6 +23,8 @@ Shuffle_Button = pygame.image.load("assets/SHUFFLEBUTTON.png")
 Reset_Button = pygame.image.load("assets/reset.png")
 BFS_Button = pygame.image.load("assets/bfs.png")
 A_etoile = pygame.image.load("assets/A_etoile.png")
+
+message = pygame.image.load("assets/reset_message.png")
 
 image1 = pygame.image.load("assets/1.png")
 image2 = pygame.image.load("assets/2.png")
@@ -111,6 +112,7 @@ class Game:
         draw_all()
         
     def shuffle(self):
+        reset_button.image = Reset_Button
         for i in range(99):
             empty_x , empty_y = self.find_empty_tile(self.player_grid)
             directions = [(empty_x + 1 , empty_y),(empty_x - 1 , empty_y),(empty_x , empty_y + 1),(empty_x , empty_y - 1)]
@@ -126,8 +128,11 @@ class Game:
     
     def reset(self):
         if self.shuffle_once:
-            self.player_grid = self.shuffled_grids[0]
-            self.shuffled_grids = []
+            if self.shuffled_grids == []:
+                reset_button.image = message
+            else:
+                self.player_grid = self.shuffled_grids[0]
+                self.shuffled_grids = []
 
     def a_etoile_solution(self):
         current_grid = [row[:] for row in self.player_grid]
@@ -208,7 +213,7 @@ def draw_buttons():
     a_etoile_button.draw(screen)
 
 def draw_all():
-    screen.fill(LIGHTGREY)
+    screen.fill(NEON)
     game.draw_tiles()
     game.draw_grid()
     draw_buttons()
@@ -263,7 +268,7 @@ while True:
                     game.handle_move(clicked_x, clicked_y)
                     moves += 1
     if game.win():
-        screen.fill(LIGHTGREY)
+        screen.fill(NEON)
         shuffle_button.draw(screen)
         reset_button.draw(screen)
         screen.blit(win_message, win_message_rect)
