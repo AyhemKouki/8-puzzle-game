@@ -232,8 +232,10 @@ while True:
             mouse_pos = (mouse_x,mouse_y)
             clicked_x , clicked_y = game.clicked_tile(mouse_x , mouse_y)
             if shuffle_button.is_clicked(mouse_pos):
+                moves = 0
                 game.shuffle()
             elif reset_button.is_clicked(mouse_pos):
+                moves = 0
                 game.reset()
             elif bfs_button.is_clicked(mouse_pos):
                 win_path = game.bfs_solution()
@@ -264,7 +266,7 @@ while True:
                 else:
                     print("Aucune solution trouvée.")
             else:
-                if pygame.mouse.get_pressed()[0] == 1 :
+                if pygame.mouse.get_pressed()[0] == 1 and not game.win():
                     game.handle_move(clicked_x, clicked_y)
                     moves += 1
     if game.win():
