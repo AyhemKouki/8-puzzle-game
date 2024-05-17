@@ -23,6 +23,8 @@ Shuffle_Button = pygame.image.load("assets/SHUFFLEBUTTON.png")
 Reset_Button = pygame.image.load("assets/reset.png")
 BFS_Button = pygame.image.load("assets/bfs.png")
 A_etoile = pygame.image.load("assets/A_etoile.png")
+Play_button = pygame.image.load("assets/play_button.png")
+TITLE = pygame.image.load("assets/title.png")
 
 message = pygame.image.load("assets/reset_message.png")
 
@@ -205,6 +207,7 @@ shuffle_button = Button(Shuffle_Button, (WIDTH - 300, HEIGHT - 575))
 reset_button = Button(Reset_Button, (WIDTH - 300, HEIGHT - 425))
 bfs_button = Button(BFS_Button, (WIDTH - 300, HEIGHT - 275))
 a_etoile_button = Button(A_etoile, (WIDTH - 300, HEIGHT - 125))
+play_button = Button(Play_button, (WIDTH //2 - 100, HEIGHT //2 - 50))
 
 def draw_buttons():
     shuffle_button.draw(screen)
@@ -217,12 +220,32 @@ def draw_all():
     game.draw_tiles()
     game.draw_grid()
     draw_buttons()
+def main_menu():
+    screen.fill(NEON)
+    title_rect = TITLE.get_rect()
+    title_rect.x = WIDTH//2 - 300
+    while True:
+        pygame.time.Clock().tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_x , mouse_y = pygame.mouse.get_pos()
+                mouse_pos = (mouse_x,mouse_y)
+                if play_button.is_clicked(mouse_pos):
+                    return True
+                
+        play_button.draw(screen)
+        screen.blit(TITLE,title_rect )
+        pygame.display.update()
 
 #GAME LOOP
+run = main_menu()
+moves = 0
 game = Game()
 game.shuffle()
-moves = 0
-while True:
+while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
