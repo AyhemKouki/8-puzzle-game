@@ -39,6 +39,10 @@ image8 = pygame.image.load("assets/8.png")
 empty_image = pygame.image.load("assets/empty.png")
 images={0:empty_image, 1:image1, 2:image2, 3:image3, 4:image4, 5:image5, 6:image6, 7:image7, 8:image8}
 
+#load sound effect
+pygame.mixer.init()
+win_sfx = pygame.mixer.Sound("sound_effects/Winning_Sound_Effect.mp3")
+
 class Button:
     def __init__(self, image, position):
         self.image = image
@@ -245,6 +249,7 @@ run = main_menu()
 moves = 0
 game = Game()
 game.shuffle()
+sound_is_played = False
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -257,9 +262,11 @@ while run:
             if shuffle_button.is_clicked(mouse_pos):
                 moves = 0
                 game.shuffle()
+                sound_is_played = False
             elif reset_button.is_clicked(mouse_pos):
                 moves = 0
                 game.reset()
+                sound_is_played = False
             elif bfs_button.is_clicked(mouse_pos):
                 win_path = game.bfs_solution()
                 if win_path:
@@ -300,6 +307,9 @@ while run:
         moves_text = font.render(f"Moves: {moves}", True, BLACK)
         moves_rect = moves_text.get_rect(midtop=(WIDTH // 3, HEIGHT // 2))
         screen.blit(moves_text, moves_rect)
+        if sound_is_played == False:
+            win_sfx.play()
+            sound_is_played = True
         
     else:
         draw_all()
