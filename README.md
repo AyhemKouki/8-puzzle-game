@@ -1,5 +1,7 @@
 # 8-Puzzle Game
 
+https://github.com/user-attachments/assets/37f42ee0-b5b4-4352-8359-f660dc70143c
+
 This is a Python implementation of the classic 8-puzzle game using the Pygame library. The objective of the game is to arrange the tiles in numerical order by sliding them into the empty space.
 
 ## Getting Started
