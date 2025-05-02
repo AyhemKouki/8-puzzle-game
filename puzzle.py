@@ -25,6 +25,9 @@ BFS_Button = pygame.image.load("assets/bfs.png")
 A_etoile = pygame.image.load("assets/A_etoile.png")
 Play_button = pygame.image.load("assets/play_button.png")
 TITLE = pygame.image.load("assets/title.png")
+# Add after other image loading statements
+Normal_Skin = pygame.image.load("assets/1.png")
+Samurai_Skin = pygame.image.load("assets/samurai/button_samurai.png")
 
 message = pygame.image.load("assets/reset_message.png")
 
@@ -38,6 +41,19 @@ image7 = pygame.image.load("assets/7.png")
 image8 = pygame.image.load("assets/8.png")
 empty_image = pygame.image.load("assets/empty.png")
 images={0:empty_image, 1:image1, 2:image2, 3:image3, 4:image4, 5:image5, 6:image6, 7:image7, 8:image8}
+
+samurai_image1 = pygame.image.load("assets/samurai/image1.png")
+samurai_image2 = pygame.image.load("assets/samurai/image2.png")
+samurai_image3 = pygame.image.load("assets/samurai/image3.png")
+samurai_image4 = pygame.image.load("assets/samurai/image4.png")
+samurai_image5 = pygame.image.load("assets/samurai/image5.png")
+samurai_image6 = pygame.image.load("assets/samurai/image6.png")
+samurai_image7 = pygame.image.load("assets/samurai/image7.png")
+samurai_image8 = pygame.image.load("assets/samurai/image8.png")
+samurai_empty = pygame.image.load("assets/empty.png")
+
+samurai_images = {0:samurai_empty, 1:samurai_image1, 2:samurai_image2, 3:samurai_image3, 
+                 4:samurai_image4, 5:samurai_image5, 6:samurai_image6, 7:samurai_image7, 8:samurai_image8}
 
 #load sound effect
 pygame.mixer.init()
@@ -56,7 +72,7 @@ class Button:
         return self.rect.collidepoint(mouse_pos) and pygame.mouse.get_pressed()[0] == 1
 
 class Game:
-    def __init__(self):
+    def __init__(self, skin='normal'):
         pygame.init()
         pygame.display.set_caption("8-puzzle game")
         self.clock = pygame.time.Clock()
@@ -64,6 +80,8 @@ class Game:
         self.completed_grid = self.create_grid()
         self.shuffle_once = False
         self.shuffled_grids = []
+        self.skin = skin
+        self.current_images = images if skin == 'normal' else samurai_images
 
     def create_grid(self):
         GRID = []
@@ -83,13 +101,13 @@ class Game:
             pygame.draw.line(screen, BLACK,(0,vert_line),(GAME_SIZE * TILE_SIZE ,vert_line))
 
     def draw_tiles(self):
-        for row , list_row in enumerate(self.player_grid):
-            for col , element in enumerate(list_row):
-                for i in (images.keys()):
+        for row, list_row in enumerate(self.player_grid):
+            for col, element in enumerate(list_row):
+                for i in (self.current_images.keys()):
                     if element == i:
-                        self.rect = images[i].get_rect()
-                        self.update(row ,col)
-                        screen.blit(images[i],(self.rect.y,self.rect.x))
+                        self.rect = self.current_images[i].get_rect()
+                        self.update(row, col)
+                        screen.blit(self.current_images[i],(self.rect.y,self.rect.x))
                 
     def update(self , x , y):
         self.rect.x = x * TILE_SIZE
@@ -224,6 +242,35 @@ def draw_all():
     game.draw_tiles()
     game.draw_grid()
     draw_buttons()
+
+def skin_selection_menu():
+    normal_button = Button(Normal_Skin, (WIDTH//3 - 100, HEIGHT//2))
+    samurai_button = Button(Samurai_Skin, (WIDTH//3 * 2 - 100, HEIGHT//2))
+
+    skin_title_image = pygame.image.load("assets/skin_title.png").convert_alpha()
+    skin_title_rect = skin_title_image.get_rect(center=(WIDTH//2, HEIGHT//4))
+    
+    screen.fill(NEON)
+    
+    while True:
+        pygame.time.Clock().tick(60)
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            elif event.type == pygame.MOUSEBUTTONDOWN:
+                mouse_pos = pygame.mouse.get_pos()
+                if normal_button.is_clicked(mouse_pos):
+                    return 'normal'
+                elif samurai_button.is_clicked(mouse_pos):
+                    return 'samurai'
+        
+        screen.fill(NEON)
+        screen.blit(skin_title_image, skin_title_rect)
+        normal_button.draw(screen)
+        samurai_button.draw(screen)
+        pygame.display.update()
+
 def main_menu():
     screen.fill(NEON)
     title_rect = TITLE.get_rect()
@@ -244,12 +291,15 @@ def main_menu():
         screen.blit(TITLE,title_rect )
         pygame.display.update()
 
+
 #GAME LOOP
 run = main_menu()
-moves = 0
-game = Game()
-game.shuffle()
-sound_is_played = False
+if run:
+    selected_skin = skin_selection_menu()
+    game = Game(skin=selected_skin)
+    game.shuffle()
+    moves = 0
+    sound_is_played = False
 while run:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
